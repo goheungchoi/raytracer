@@ -1,5 +1,11 @@
+# Raytracer
+version 1.1.0
+
+## Description
+This is a raytracing program using the Phong illustration model with additional functions. Users can input image data with a formatted text file, and the result file will be printed out as a ppm format file.
+
 ## File Format
-    **color values should be between 0 and 1**
+**color values should be between 0 and 1**
 
     eye x y z
     viewdir dir_x dir_y dir_z
@@ -56,69 +62,69 @@
         normal ...
         mesh 2 0 1
 
-## Run This program
-    - Linux :
-        -Type following command lines:
-            > $ make
-            > $ ./raytracer {file_dir}
-    - Windows :
-        -Install C/C++ extension from Microsoft
-        -Go to "Run" - "Run without debugging"
-        -Type following command lines on Console:
-            > raytracer {file_dir}
+## How to Run
+- Linux :
+    -Type following command lines:
+        > $ make
+        > $ ./raytracer {file_dir}
+- Windows :
+    -Install C/C++ extension from Microsoft
+    -Go to "Run" - "Run without debugging"
+    -Type following command lines on Console:
+        > raytracer {file_dir}
 
 ## Features
-    - **shapes** folder contains multiple files that requires for representing 3D figures and calculating interactions between objects.
-    The structure looks like this:
+- **shapes** folder contains multiple files that requires for representing 3D figures and calculating interactions between objects.
+The structure looks like this:
+
+object.h <------- line.h
+|                   |
+cylinder.h        vector.h
+sphere.h            |
+plane.h           point.h
+triangle_mesh.h
+    ↑
+triangle.h
+
+- **streams** folder contains a C++ file that creats I/O streams for reading a .txt file and writing a .ppm file.
+    - Once the object, file-stream, is created, input and output stream will not be terminated until the program is exited or the user destructed the object manually.
+    - This file has a function in order to bulletproof. What it means is that it determines whether input is valid and invalid. If data is not valid format, it terminates the program and raises an appropriate error
+
+- **scene.cpp** contains every necessary information for creating an image. This is the actual backbone of the program. It contains objects information, the position of the camera, view direction, and etc.
+
+- **ray-casting.cpp** works like a main function. It puts everything together and creates a appropriate .ppm image file.
+
+- **anti aliasing**: anti aliasing is hard-coded.
+
+## Recently Added Features
+1. Generating a Square
+    - Plane class generates a square shape centered at O and extended along with the direction vector.
+    - The direction vector is a vector on the plane that obtains x and y value. ex) dir(1, 0), w = 10, h = 5 --> a rectangular extending along x axis.
+
+2. Triangle Mesh
+    - This program can generate triangle meshes.
+    - Triangle object
+        - 3 vertices: p0, p1, p2.
+        - 2 edge vectors: e1 = vec3D(p1 - p0), e2 = vec3D(p2 - p0);
+        - 3 direction vectors: T, B, N
+        - 3 texture coordinate: c0, c1, c2
+        - 3 vertex normal vectors: vn0, vn1, v2;
+    - Every triangle object must be contained by a Triangle_Mesh object in order to be used.
+
+3. Texture Mapping
+    - Texture mapping function is implemented.
+    - Texture maps must be ppm file format
+
+4. Smooth Shading
+    - Smooth shading becomes enabled automatically when vectex normals are inputted.
     
-    object.h <------- line.h
-    |                   |
-    cylinder.h        vector.h
-    sphere.h            |
-    plane.h           point.h
-    triangle_mesh.h
-        ↑
-    triangle.h
+5. Normal Mapping
+    - Normal Mapping is available.
+    - Normal maps must be ppm file format
+    - Each blue value must be greater than 127 and smaller than 256
     
-    - **streams** folder contains a C++ file that creats I/O streams for reading a .txt file and writing a .ppm file.
-        - Once the object, file-stream, is created, input and output stream will not be terminated until the program is exited or the user destructed the object manually.
-        - This file has a function in order to bulletproof. What it means is that it determines whether input is valid and invalid. If data is not valid format, it terminates the program and raises an appropriate error
-
-    - **scene.cpp** contains every necessary information for creating an image. This is the actual backbone of the program. It contains objects information, the position of the camera, view direction, and etc.
-
-    - **ray-casting.cpp** works like a main function. It puts everything together and creates a appropriate .ppm image file.
-
-    - **anti aliasing**: anti aliasing is hard-coded.
-
-## A1-c Added Feture
-    1. Generating a Square
-        - Plane class generates a square shape centered at O and extended along with the direction vector.
-        - The direction vector is a vector on the plane that obtains x and y value. ex) dir(1, 0), w = 10, h = 5 --> a rectangular extending along x axis.
-
-    2. Triangle Mesh
-        - This program can generate triangle meshes.
-        - Triangle object
-            - 3 vertices: p0, p1, p2.
-            - 2 edge vectors: e1 = vec3D(p1 - p0), e2 = vec3D(p2 - p0);
-            - 3 direction vectors: T, B, N
-            - 3 texture coordinate: c0, c1, c2
-            - 3 vertex normal vectors: vn0, vn1, v2;
-        - Every triangle object must be contained by a Triangle_Mesh object in order to be used.
-
-    3. Texture Mapping
-        - Texture mapping function is implemented.
-        - Texture maps must be ppm file format
-
-    4. Smooth Shading
-        - Smooth shading becomes enabled automatically when vectex normals are inputted.
-        
-    5. Normal Mapping
-        - Normal Mapping is available.
-        - Normal maps must be ppm file format
-        - Each blue value must be greater than 127 and smaller than 256
-        
-    6. Reflection & Refraction
-        - Intensity of reflection is calculated via the intensity of reflected ray multiplied by ks value of an object. In other words, the value of ks determines whether there is reflectin on an object or not.
-        - Refraction is calculated via Fresnal reflection.
-        - This program uses the total distance that a ray travels rather than recursion depth in order to terminate a loop 
+6. Reflection & Refraction
+    - Intensity of reflection is calculated via the intensity of reflected ray multiplied by ks value of an object. In other words, the value of ks determines whether there is reflectin on an object or not.
+    - Refraction is calculated via Fresnal reflection.
+    - This program uses the total distance that a ray travels rather than recursion depth in order to terminate a loop 
 
