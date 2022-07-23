@@ -64,16 +64,16 @@ This is a raytracing program using the Phong illustration model with additional 
 ```
 
 ## How to Run
-- Linux :
-    -Type following command lines:
+- Linux : 
+    - Type following command lines: 
     ```
         > $ make
         > $ ./raytracer {file_dir}
     ```
-- Windows :
-    -Install C/C++ extension from Microsoft
-    -Go to "Run" - "Run without debugging"
-    -Type following command lines on Console:
+- Windows : 
+    - Install C/C++ extension from Microsoft 
+    - Go to "Run" - "Run without debugging" 
+    - Type following command lines on Console: 
     ```
         > raytracer {file_dir}
     ```
