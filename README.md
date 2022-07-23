@@ -1,5 +1,4 @@
-# Raytracer ```version 1.1.0
-
+# Raytracer 1.1.0
 
 ## Description
 This is a raytracing program using the Phong illustration model with additional functions. Users can input image data with a formatted text file, and the result file will be printed out as a ppm format file.
