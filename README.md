@@ -3,7 +3,7 @@
 ## Description
 This is a raytracing program using the Phong illustration model with additional functions. Users can input image data with a formatted text file, and the result file will be printed out as a ppm format file.
 
-## File Format
+## Input Text File Format
 
 ```
     // color values(r, g, b) should be between 0 and 1
