@@ -64,7 +64,7 @@ This is a raytracing program using the Phong illustration model with additional 
 ```
 
 ## How to Run
-- Linux : 
+- Linux/MacOS : 
     - Type following command lines: 
     ```
         > $ make
