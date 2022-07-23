@@ -5,61 +5,61 @@ This is a raytracing program using the Phong illustration model with additional 
 
 ## File Format
 
-    # color values(r, g, b) should be **between 0 and 1**
-    eye x y z
-    viewdir dir_x dir_y dir_z
-    updir dir_x dir_y dir_z
-    vfov v_degree
-    imsize image_width image_height
-    depthcueing r g b a_max a_min dist_max dist_min (0 <= a_max, a_min <= 1)
-    bkgcolor r g b
+- color values(r, g, b) should be **between 0 and 1**
+eye x y z
+viewdir dir_x dir_y dir_z
+updir dir_x dir_y dir_z
+vfov v_degree
+imsize image_width image_height
+depthcueing r g b a_max a_min dist_max dist_min (0 <= a_max, a_min <= 1)
+bkgcolor r g b
 
-    mtlcolor Odr Odg Odb Osr Osg Osb ka kd ks n opacity index_of_refraction
-    texture {directory}
-    normal {directory}
-    sphere x y z radius
-    plane nx ny nz px py pz dir_x dir_y w h 
+mtlcolor Odr Odg Odb Osr Osg Osb ka kd ks n opacity index_of_refraction
+texture {directory}
+normal {directory}
+sphere x y z radius
+plane nx ny nz px py pz dir_x dir_y w h 
 
-    # light_type 
-        0 -> directional light - automatically this program doesn't store attenuation values
-        1 -> point light - attenuation values& light source radius
-        2 -> highlight - dir vector instead of attenuation values& highlight angle
-    (# ) default attenuation values c1 = 0.0, c2 = 0.0, c3 = 0.0
-    (# ) default angle = 0
-    (# ) default radius = 1.0
-    light x y z light_type r g b
-    ex)
-        attlight dir_x dir_y dir_z 0 r g b N/A N/A N/A N/A
-        attlight x y z 1 r g b c1 c2 c3 radius
-        attlight x y z 2 dir_v_x dir_v_y dir_v_z c1 c2 c3 angle
+- light_type 
+    0 -> directional light - automatically this program doesn't store attenuation values
+    1 -> point light - attenuation values& light source radius
+    2 -> highlight - dir vector instead of attenuation values& highlight angle
+(# ) default attenuation values c1 = 0.0, c2 = 0.0, c3 = 0.0
+(# ) default angle = 0
+(# ) default radius = 1.0
+light x y z light_type r g b
+ex)
+    attlight dir_x dir_y dir_z 0 r g b N/A N/A N/A N/A
+    attlight x y z 1 r g b c1 c2 c3 radius
+    attlight x y z 2 dir_v_x dir_v_y dir_v_z c1 c2 c3 angle
 
-    **how to create triangle mesh**
-    (# ) triangles must be stored in a triangle mesh
-    (# ) meshes contains data about texturing and normal mapping etc..
-    (# ) 0 <= u, v <= 1
-    (# ) index starts from 1
+**how to create triangle mesh**
+(# ) triangles must be stored in a triangle mesh
+(# ) meshes contains data about texturing and normal mapping etc..
+(# ) 0 <= u, v <= 1
+(# ) index starts from 1
 
-        v vx vy vz
-        vt u v
-        vn nx ny nz
+    v vx vy vz
+    vt u v
+    vn nx ny nz
 
-        f v_index/(vt_index)/(vn_index) v_index/(vt_index)/(vn_index) v_index/(vt_index)/(vn_index)
+    f v_index/(vt_index)/(vn_index) v_index/(vt_index)/(vn_index) v_index/(vt_index)/(vn_index)
 
-        mesh num_of_face face_index face_index face_index ...
+    mesh num_of_face face_index face_index face_index ...
 
-    (# ) example:
-        v ...
-        v ...
-        v ...
-        v ...
+(# ) example:
+    v ...
+    v ...
+    v ...
+    v ...
 
-        f 0 1 2
-        f 3 2 1
+    f 0 1 2
+    f 3 2 1
 
-        mtlcolor ...
-        texture ...
-        normal ...
-        mesh 2 0 1
+    mtlcolor ...
+    texture ...
+    normal ...
+    mesh 2 0 1
 
 ## How to Run
 - Linux :
