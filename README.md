@@ -80,16 +80,6 @@ This is a raytracing program using the Phong illustration model with additional 
 
 ## Features
 - **shapes** folder contains multiple files that requires for representing 3D figures and calculating interactions between objects.
-The structure looks like this:
-
-object.h <------- line.h
-|                   |
-cylinder.h        vector.h
-sphere.h            |
-plane.h           point.h
-triangle_mesh.h
-    ↑
-triangle.h
 
 - **streams** folder contains a C++ file that creats I/O streams for reading a .txt file and writing a .ppm file.
     - Once the object, file-stream, is created, input and output stream will not be terminated until the program is exited or the user destructed the object manually.
