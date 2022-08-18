@@ -171,6 +171,7 @@ Vector3D* Triangle::getNormalVector(const Point& p, const Line& l) {
         return new Vector3D(unit_n);
     }
   }
+  return normal_vector;
 }
 
 Point* Triangle::getOdLambda(const Point& p) {
