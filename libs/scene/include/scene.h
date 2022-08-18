@@ -4,10 +4,14 @@
 #include <iostream>
 #include <vector>
 
-#include "light.h"
-#include "line.h"
 #include "object.h"
+#include "plane.h"
 #include "point.h"
+#include "sphere.h"
+#include "cylinder.h"
+#include "light.h"
+#include "triangle.h"
+#include "triangle_mesh.h"
 #include "vector3D.h"
 
 typedef struct dc {
