@@ -68,7 +68,7 @@ This is a raytracing program using the Phong illustration model with additional 
     - Type following command lines: 
     ```
         > $ make
-        > $ ./raytracer {file_dir}
+        > $ build/bin/raytracer {file_dir}
     ```
 - Windows : 
     - Install C/C++ extension from Microsoft 
