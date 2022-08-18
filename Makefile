@@ -1,8 +1,5 @@
 all: obj stream scene raytracer
 
-obj: build
-	cd libs/obj; make
-
 stream: build
 	cd libs/stream; make
 

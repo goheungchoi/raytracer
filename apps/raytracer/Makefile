@@ -6,9 +6,9 @@ APP_NAME = raytracer
 
 BUILD_DIR = $(ROOT_DIR)/build/apps/$(APP_NAME)
 EXEFILE = $(ROOT_DIR)/build/bin/$(APP_NAME)
-INCLUDES = -I.. -Isrc -I. -Iinclude -I. -I$(ROOT_DIR)/libs/obj/include -I$(ROOT_DIR)/libs/scene/include -I$(ROOT_DIR)/libs/stream/include
+INCLUDES = -I.. -Isrc -I. -Iinclude -I. -I$(ROOT_DIR)/libs/scene/include -I$(ROOT_DIR)/libs/stream/include
 LIBDIRS = -L$(ROOT_DIR)/build/lib
-LIBS = -lobj -lscene -lstream -lz
+LIBS = -lscene -lstream -lz
 SOURCES = $(shell find src -name '*.cpp')
 OBJFILES = $(addprefix $(BUILD_DIR)/, $(SOURCES:.cpp=.o))
 
