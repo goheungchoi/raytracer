@@ -1,4 +1,4 @@
-#include "file-stream.h"
+#include "file_stream.h"
 
 FileStream::FileStream() {}
 
