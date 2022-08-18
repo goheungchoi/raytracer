@@ -44,13 +44,13 @@ int main() {
     Line l(start, v);
     Point p(3, 0, 6);
 
-    Vector3D* n = sphere.getNormalVector(p);
+    Vector3D* n = sphere.getNormalVector(p, l);
     std::cout << n->x << " " << n->y << " " << n->z << std::endl;
 
 
     Vector3D V(p, start);
     Point total_I(0.0, 0.0, 0.0);
-    Vector3D* N = sphere.getNormalVector(p);
+    Vector3D* N = sphere.getNormalVector(p, l);
     
     Point Od(sphere.clr.dr, sphere.clr.dg, sphere.clr.db);
     Point Os(sphere.clr.sr, sphere.clr.sg, sphere.clr.sb);
