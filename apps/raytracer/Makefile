@@ -15,7 +15,7 @@ OBJFILES = $(addprefix $(BUILD_DIR)/, $(SOURCES:.cpp=.o))
 all: $(EXEFILE)
 
 # Applicaiton Targets:
-$(EXEFILE): $(OBJFILES)
+$(EXEFILE): $(ROOT_DIR)/build/lib/libobj.a $(OBJFILES)
 	mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(LIBDIRS) $(OBJFILES) $(LIBS) -o $@
 

@@ -7,7 +7,7 @@ LIB_NAME = libscene.a
 BUILD_DIR = $(ROOT_DIR)/build/libs/$(LIB_NAME)
 LIBFILE = $(ROOT_DIR)/build/lib/$(LIB_NAME)
 INCLUDES = -I.. -Isrc -I. -Iinclude -I. -I$(ROOT_DIR)/libs/obj/include -I$(ROOT_DIR)/libs/stream/include
-LIBS = -lobj -stream
+LIBS = 
 SOURCES = $(shell find src -name '*.cpp')
 OBJFILES = $(addprefix $(BUILD_DIR)/, $(SOURCES:.cpp=.o))
 
