@@ -1,12 +1,12 @@
-# Raytracer
-version 1.1.0
+# Raytracer <sub>v1.1</sub>
 
 ## Description
 This is a raytracing program using the Phong illustration model with additional functions. Users can input image data with a formatted text file, and the result file will be printed out as a ppm format file.
 
-## File Format
-**color values should be between 0 and 1**
+## Input Text File Format
 
+```
+    // color values(r, g, b) should be between 0 and 1
     eye x y z
     viewdir dir_x dir_y dir_z
     updir dir_x dir_y dir_z
@@ -21,10 +21,10 @@ This is a raytracing program using the Phong illustration model with additional 
     sphere x y z radius
     plane nx ny nz px py pz dir_x dir_y w h 
 
-    # light_type 
+    /* light_type 
         0 -> directional light - automatically this program doesn't store attenuation values
         1 -> point light - attenuation values& light source radius
-        2 -> highlight - dir vector instead of attenuation values& highlight angle
+        2 -> highlight - dir vector instead of attenuation values& highlight angle */
     (# ) default attenuation values c1 = 0.0, c2 = 0.0, c3 = 0.0
     (# ) default angle = 0
     (# ) default radius = 1.0
@@ -34,7 +34,7 @@ This is a raytracing program using the Phong illustration model with additional 
         attlight x y z 1 r g b c1 c2 c3 radius
         attlight x y z 2 dir_v_x dir_v_y dir_v_z c1 c2 c3 angle
 
-    **how to create triangle mesh**
+    /* how to create triangle mesh */
     (# ) triangles must be stored in a triangle mesh
     (# ) meshes contains data about texturing and normal mapping etc..
     (# ) 0 <= u, v <= 1
@@ -61,30 +61,25 @@ This is a raytracing program using the Phong illustration model with additional 
         texture ...
         normal ...
         mesh 2 0 1
+```
 
 ## How to Run
-- Linux :
-    -Type following command lines:
+- Linux/MacOS : 
+    - Type following command lines: 
+    ```
         > $ make
         > $ ./raytracer {file_dir}
-- Windows :
-    -Install C/C++ extension from Microsoft
-    -Go to "Run" - "Run without debugging"
-    -Type following command lines on Console:
+    ```
+- Windows : 
+    - Install C/C++ extension from Microsoft 
+    - Go to "Run" - "Run without debugging" 
+    - Type following command lines on Console: 
+    ```
         > raytracer {file_dir}
+    ```
 
 ## Features
 - **shapes** folder contains multiple files that requires for representing 3D figures and calculating interactions between objects.
-The structure looks like this:
-
-object.h <------- line.h
-|                   |
-cylinder.h        vector.h
-sphere.h            |
-plane.h           point.h
-triangle_mesh.h
-    ↑
-triangle.h
 
 - **streams** folder contains a C++ file that creats I/O streams for reading a .txt file and writing a .ppm file.
     - Once the object, file-stream, is created, input and output stream will not be terminated until the program is exited or the user destructed the object manually.
