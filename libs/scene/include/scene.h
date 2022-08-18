@@ -4,15 +4,15 @@
 #include <iostream>
 #include <vector>
 
-#include "object.h"
-#include "plane.h"
-#include "point.h"
-#include "sphere.h"
-#include "cylinder.h"
-#include "light.h"
-#include "triangle.h"
-#include "triangle_mesh.h"
-#include "vector3D.h"
+#include "obj/object.h"
+#include "obj/plane.h"
+#include "obj/point.h"
+#include "obj/sphere.h"
+#include "obj/cylinder.h"
+#include "obj/light.h"
+#include "obj/triangle.h"
+#include "obj/triangle_mesh.h"
+#include "obj/vector3D.h"
 
 typedef struct dc {
   Point I_dc = Point(0.0, 0.0, 0.0);
