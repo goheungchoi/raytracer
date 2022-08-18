@@ -557,7 +557,7 @@ void FileStream::readBumpMapFile() {
 void FileStream::load_ppm(ImageRGB &img, const std::string &name) {
   std::ifstream f(name.c_str(), std::ios::binary);
   if (f.fail()) {
-    std::cout << "Could not open file: " << name << std::endl;
+    std::cout << "Can't open file: " << name << std::endl;
     return;
   }
 
