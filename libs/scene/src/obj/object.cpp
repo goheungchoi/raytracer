@@ -1,4 +1,4 @@
-#include "object.h"
+#include "obj/object.h"
 
 text_coor text_coor::operator+(const text_coor& coor) {
   double new_u = this->u + coor.u;

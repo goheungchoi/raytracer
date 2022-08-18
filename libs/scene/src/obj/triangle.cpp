@@ -1,4 +1,4 @@
-#include "triangle.h"
+#include "obj/triangle.h"
 
 Triangle::Triangle() : Object("", color{0, 0, 0}, 1.0, 1.0) {}
 

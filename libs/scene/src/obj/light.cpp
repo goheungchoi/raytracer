@@ -1,4 +1,4 @@
-#include "light.h"
+#include "obj/light.h"
 
 Light::Light(I intensity)
 {

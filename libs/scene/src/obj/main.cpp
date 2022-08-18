@@ -5,11 +5,11 @@
 #include <stdexcept>
 #include <stdlib.h>
 #include <math.h>
-#include "object.h"
-#include "point.h"
-#include "sphere.h"
-#include "plane.h"
-#include "vector3D.h"
+#include "obj/object.h"
+#include "obj/point.h"
+#include "obj/sphere.h"
+#include "obj/plane.h"
+#include "obj/vector3D.h"
 
 typedef struct I {
     double Ir = 1.0;

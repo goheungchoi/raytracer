@@ -1,4 +1,4 @@
-#include "triangle_mesh.h"
+#include "obj/triangle_mesh.h"
 
 TriangleMesh::TriangleMesh() : Object("", color{0, 0, 0}, 1.0, 1.0) {
   this->triangles = new std::vector<Triangle*>();

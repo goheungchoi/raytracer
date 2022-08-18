@@ -1,4 +1,4 @@
-#include "sphere.h"
+#include "obj/sphere.h"
 
 #include <math.h>
 
