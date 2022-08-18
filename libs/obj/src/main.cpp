@@ -36,29 +36,30 @@ typedef struct I {
 int main() {
 
     Point origin(0, 0, 2);
-    Sphere sphere("0", color{0.5, 1, 0,1,0,0,0.2,0.4,0.2,20}, origin, 5);
+    Sphere sphere("0", color{0.5, 1, 0,1,0,0,0.2,0.4,0.2,20}, 
+                  1.0, 1.0, origin, 5);
 
     Point start(0,0,10);
-    Vector v(3, 0, -4);
+    Vector3D v(3, 0, -4);
     Line l(start, v);
     Point p(3, 0, 6);
 
-    Vector* n = sphere.getNormalVector(p);
+    Vector3D* n = sphere.getNormalVector(p);
     std::cout << n->x << " " << n->y << " " << n->z << std::endl;
 
 
-    Vector V(p, start);
+    Vector3D V(p, start);
     Point total_I(0.0, 0.0, 0.0);
-    Vector* N = sphere.getNormalVector(p);
+    Vector3D* N = sphere.getNormalVector(p);
     
     Point Od(sphere.clr.dr, sphere.clr.dg, sphere.clr.db);
     Point Os(sphere.clr.sr, sphere.clr.sg, sphere.clr.sb);
     
     Point I_ambient = Od * sphere.clr.ka;
 
-    Vector L(Point(3,0,6), Point(5,2,7));
+    Vector3D L(Point(3,0,6), Point(5,2,7));
     L = L.getUnit();
-    Vector H = ((L + V) / (L + V).getMag());
+    Vector3D H = ((L + V) / (L + V).getMag());
 
         //N*L
         double N_dot_L = N->dotProd(L);
