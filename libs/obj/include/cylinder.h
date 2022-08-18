@@ -19,7 +19,7 @@ class Cylinder : virtual public Object {
   Vector3D* getNormalVector(const Point& p, const Line& l) {
     return new Vector3D();
   };
-  Point* getOdLambda(const Point& p) {}
+  Point* getOdLambda(const Point& p) { return nullptr; }
 
  private:
   int lineIntersection(double a, double b, double c);
