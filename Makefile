@@ -1,4 +1,4 @@
-all: obj scene stream raytracer
+all: obj stream scene raytracer
 
 obj: build
 	cd libs/obj; make
@@ -9,7 +9,7 @@ stream: build
 scene: build obj stream
 	cd libs/scene; make
 
-raytracer: build obj scene stream
+raytracer: build obj stream scene
 	cd apps/raytracer; make
 
 build:

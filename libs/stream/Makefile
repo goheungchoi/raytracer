@@ -6,7 +6,7 @@ LIB_NAME = libstream.a
 
 BUILD_DIR = $(ROOT_DIR)/build/libs/$(LIB_NAME)
 LIBFILE = $(ROOT_DIR)/build/lib/$(LIB_NAME)
-INCLUDES = -I.. -Iinclude -I.
+INCLUDES = -I.. -Isrc -I. -Iinclude -I.
 LIBS = 
 SOURCES = $(shell find src -name '*.cpp')
 OBJFILES = $(addprefix $(BUILD_DIR)/, $(SOURCES:.cpp=.o))
