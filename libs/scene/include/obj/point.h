@@ -1,42 +1,83 @@
 #ifndef _POINT_
 #define _POINT_
 
+#include "util.h"
 
-#include <iostream>
-#include <cmath>
-
-class Point
-{
+class Point {
 public:
-    double x;
-    double y;
-    double z;
-    Point();
-    Point(double x, double y, double z);
-    Point(const Point &p);
-    Point operator+(const Point &p);
-    Point operator-(const Point &p);
-    Point operator*(const Point &p);
-    Point operator*(const double &n);
-    Point operator/(const Point &p);
-    Point operator/(const double &n);
-    double getDistance(const Point &p);
+    double x = 0.0;
+    double y = 0.0;
+    double z = 0.0;
+    // Default constructor
+    constexpr Point() = default;
+    // Parameterized constructor
+    constexpr Point(double x, double y, double z) : x(x), y(y), z(z) {};
+    // Default copy constructor
+    Point(const Point&) = default;
+    // Copy assignment operator
+    Point& operator=(const Point& other) {
+        if (this != &other) {
+            x = other.x;
+            y = other.y;
+            z = other.z;
+        }
+        return *this;
+    }
+    // Defaulted move constructor and move assignment operator
+    Point(Point&&) noexcept = default;
+    Point& operator=(Point&&) noexcept = default;
+
+    // Member functions
+    double getDistance(const Point &p) const;
     void print() const;
 
-    friend bool operator==(const Point& l, const Point& r)
-    {
-        double e = 0.01;
-        bool x = fabs(l.x - r.x) < e && -fabs(l.x-r.x) < e;
-        bool y = fabs(l.y - r.y) < e && -fabs(l.y-r.y) < e;
-        bool z = fabs(l.z - r.z) < e && -fabs(l.z-r.z) < e;
-        
-        return x && y && z; 
-    }
-
-    friend bool operator!=(const Point& l, const Point& r)
-    {
-        return !(l == r);
-    }
+    // Deconstructor
+    ~Point() = default;
 };
+
+// non-member functions
+double getDistance(const Point& l, const Point& r);
+
+// Overloaded operators
+constexpr Point operator+(const Point& l, const Point& r){
+    return Point(l.x + r.x, l.y + r.y, l.z + r.z);
+}
+constexpr Point operator-(const Point& l, const Point& r){
+    return Point(l.x - r.x, l.y - r.y, l.z - r.z);
+}
+constexpr Point operator*(const Point& l, const Point& r){
+    return Point(l.x * r.x, l.y * r.y, l.z * r.z);
+}
+constexpr Point operator*(const double n, const Point& p){
+    return Point(n * p.x, n * p.y, n * p.z);
+}
+constexpr Point operator*(const Point& l, const double n){
+    return n * l;
+}
+constexpr Point operator/(const Point& l, const Point &r){
+    if (r.x == 0 || r.y == 0 || r.z == 0)
+        throw std::invalid_argument("Division by zero");
+    return Point(l.x / r.x, l.y / r.y, l.z / r.z);
+}
+constexpr Point operator/(const double n, const Point &p){
+    if (p.x == 0 || p.y == 0 || p.z == 0)
+        throw std::invalid_argument("Division by zero");
+    return Point(n / p.x, n / p.y, n / p.z);
+}
+constexpr Point operator/(const Point &p, const double n) {
+    if (n == 0)
+        throw std::invalid_argument("Division by zero");
+    return Point(p.x / n, p.y / n, p.z / n);
+}
+constexpr bool operator==(const Point& l, const Point& r){
+    bool x = util::almost_equal(l.x, r.x, 100);
+    bool y = util::almost_equal(l.y, r.y, 100);
+    bool z = util::almost_equal(l.z, r.z, 100);
+    
+    return x && y && z; 
+}
+constexpr bool operator!=(const Point& l, const Point& r){
+    return !(l == r);
+}
 
 #endif

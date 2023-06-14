@@ -1,56 +1,14 @@
 #include "obj/point.h"
 
-Point::Point() {
-    this->x = 0;
-    this->y = 0;
-    this->z = 0;
+double Point::getDistance(const Point &p) const {
+    double tx = x - p.x, ty = y - p.y, tz = z - p.z;
+    return std::sqrt(tx*tx + ty*ty + tz*tz);
 }
 
-Point::Point(double x, double y, double z)
-{
-    this->x = x;
-    this->y = y;
-    this->z = z;
-}
-
-Point::Point(const Point &p)
-{
-    x = p.x;
-    y = p.y;
-    z = p.z;
-}
-
-Point Point::operator+(const Point &p) {
-    return Point(this->x + p.x, this->y + p.y, this->z + p.z);
-}
-
-Point Point::operator-(const Point &p) {
-    return Point(this->x - p.x, this->y - p.y, this->z - p.z);
-}
-
-Point Point::operator*(const Point &p) {
-    return Point(this->x * p.x, this->y * p.y, this->z * p.z);
-}
-
-Point Point::operator*(const double &n) {
-    return Point(this->x * n, this->y * n, this->z * n);
-}
-
-Point Point::operator/(const Point &p) {
-    return Point(this->x / p.x, this->y / p.y, this->z / p.z);
-}
-
-Point Point::operator/(const double &n) {
-    return Point(this->x / n, this->y / n, this->z / n);
-}
-
-double Point::getDistance(const Point &p) {
-    double tempx = (x - p.x) * (x - p.x);
-    double tempy = (y - p.y) * (y - p.y);
-    double tempz = (z - p.z) * (z - p.z);
-    return sqrt(tempx + tempy + tempz);
+double getDistance(const Point& l, const Point& r) {
+    return l.getDistance(r);
 }
 
 void Point::print() const {
-    std::cout << "point(" << x << ", " << y << ", " << z << ")\n";
+    std::cout << "Point: (" << x << ", " << y << ", " << z << ")" << std::endl;
 }

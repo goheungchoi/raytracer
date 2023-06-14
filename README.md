@@ -1,4 +1,12 @@
-# Raytracer <sub>v1.1</sub>
+# raytracer
+
+**Author**: Goheung Choi
+
+**Version**: *`1.1.2`*
+
+**Last Update**: *06/13/23*
+
+**New Update**: Modernization and optimization using C++17 features.
 
 ## Description
 This is a raytracing program using the Phong illustration model with additional functions. Users can input image data with a formatted text file, and the result file will be printed out as a ppm format file.

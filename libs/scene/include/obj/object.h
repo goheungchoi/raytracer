@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "line.h"
+#include "ray.h"
 
 /**
  * @brief represents the color values of an object
