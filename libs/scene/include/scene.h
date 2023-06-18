@@ -1,21 +1,22 @@
-#ifndef _SCENE_
-#define _SCENE_
+#ifndef _SCENE_H_
+#define _SCENE_H_
 
-#include <iostream>
-#include <vector>
+#include "util/util.h"
 
+#include "obj/vector3D.h"
+#include "obj/point.h"
+#include "obj/ray.h"
+#include "obj/light.h"
 #include "obj/object.h"
 #include "obj/plane.h"
-#include "obj/point.h"
 #include "obj/sphere.h"
 #include "obj/cylinder.h"
-#include "obj/light.h"
 #include "obj/triangle.h"
 #include "obj/triangle_mesh.h"
-#include "obj/vector3D.h"
+
 
 typedef struct dc {
-  Point I_dc = Point(0.0, 0.0, 0.0);
+  I I_dc{0.0, 0.0, 0.0};
   double dist_near = 10.0;
   double dist_far = 50.0;
   double a_max = 1.0;
@@ -23,7 +24,8 @@ typedef struct dc {
 } dc;
 
 class Scene {
- public:
+public:
+  // Member variables
   Point view_o;
   Vector3D view_dir, v, u, n;
   Vector3D up_dir;
@@ -37,19 +39,26 @@ class Scene {
   double win_width = 0;
   Point ul, ur, ll, lr;
   Point delta_c_h, delta_c_v, delta_h, delta_v;
-  std::vector<Object*> obj;
+  std::vector<std::unique_ptr<Object>> objects;
   I bkgColor;
-  std::vector<Light*> lights;
+  std::vector<std::unique_ptr<Light>> lights;
   dc depth_cue;
   bool depth_cueing_on = false;
 
-  Scene();
-  Scene(Point cam_pos, Vector3D view_dir, Vector3D up_dir, double vfov,
-        double image_width, double image_height, double d);
-  ~Scene();
-  Point getPixelAt(int i, int j);
-  Point* getRayIntersection(const Line& ray, int& index);
-  Point getDepthCueing(Point& I, const Point& p);
+  // Default constructor
+  Scene() = default;
+  // Parameterized constructors
+  Scene(Point cam_pos, Vector3D view_dir, Vector3D up_dir, 
+    double vfov, double image_width, double image_height, double d);
+  // Member functions
+  std::optional<Point> getRayIntersection(const Ray& ray, int& index);
+  I getDepthCueing(const I& I, const Point& p);
+  void addObjectUniquePtr(std::unique_ptr<Object>&&);
+  void addLightUniquePtr(std::unique_ptr<Light>&&);
+  // Inline member functions
+  inline constexpr Point getPixelAt(int i, int j) const {
+    return ul + delta_h*i + delta_v*j + delta_c_h + delta_c_v;
+  };
 };
 
-#endif
+#endif  //_SCENE_H_

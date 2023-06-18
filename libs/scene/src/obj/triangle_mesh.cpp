@@ -1,84 +1,90 @@
 #include "obj/triangle_mesh.h"
 
-TriangleMesh::TriangleMesh() : Object("", color{0, 0, 0}, 1.0, 1.0) {
-  this->triangles = new std::vector<Triangle*>();
-}
+// TODO: Make BVH of triangles.
 
-TriangleMesh::TriangleMesh(std::string name, color clr, double opacity,
-                           double index_of_refraction)
-    : Object(name, clr, opacity, index_of_refraction) {
-  this->triangles = new std::vector<Triangle*>();
-}
+std::optional<Point> TriangleMesh::getIntersection(const Ray& r) const {
+  if (triangles.empty()) return std::nullopt;
 
-TriangleMesh::~TriangleMesh() {
-  for (Triangle* tri : *triangles) delete tri;
-  delete triangles;
-}
-
-Point* TriangleMesh::getIntersection(const Line& l) {
-  for (Triangle* tri : *triangles) {
-    Point* p = tri->getIntersection(l);
-    if (p != nullptr) return p;
-  }
-  return nullptr;
-}
-
-Vector3D* TriangleMesh::getNormalVector(const Point& p) {
-  for (Triangle* tri : *triangles) {
-    Vector3D* n = tri->getNormalVector(p);
-    if (n != nullptr) {
-      if (tri->isNormalMapping() && normal_mapping) {
-        text_coor tc = tri->getTextureCoor(p);
-        Point vec = normal_map.getBilinearInterpolation(tc);
-        Vector3D m(vec.x, vec.y, vec.z);
-        return new Vector3D(tri->rotateVectorTBN(m));
-      } else
-        return n;
-    }
-  }
-  return nullptr;
-}
-
-Vector3D* TriangleMesh::getNormalVector(const Point& p, const Line& l) {
-  for (Triangle* tri : *triangles) {
-    Vector3D* n = tri->getNormalVector(p);
-    if (n != nullptr) {
-      if (tri->isNormalMapping() && normal_mapping) {
-        text_coor tc = tri->getTextureCoor(p);
-        Point vec = normal_map.getBilinearInterpolation(tc);
-        Vector3D m(vec.x, vec.y, vec.z);
-        Vector3D normal_vector(tri->rotateVectorTBN(m));
-        // is the ray inside the triangle mesh?
-        Vector3D v(l.v);
-        // if surface_normal~I > inversed_surface_normal~I => ray is inside
-        if ((-v).getAngle(normal_vector) > (-v).getAngle(-normal_vector))
-          return new Vector3D(-normal_vector);
-        else
-          return new Vector3D(normal_vector);
-      } else {
-        Vector3D v(l.v);
-        if ((-v).getAngle(*n) > (-v).getAngle(-*n))
-          return new Vector3D(-*n);
-        else
-          return new Vector3D(*n);
+  // Find the point closest to the ray origin.
+  std::optional<Point> closestPoint;
+  double closestDistance = INFINITY;
+  for (const auto& triangle : triangles) {
+    if (auto p = (*triangle).getIntersection(r)) {
+      double distance = (*p).getDistance(r.o);
+      if (!closestPoint || distance < closestDistance) {
+        closestPoint = p;
+        closestDistance = distance;
       }
     }
   }
-  return nullptr;
+  return closestPoint;
 }
 
-Point* TriangleMesh::getOdLambda(const Point& p) {
-  for (Triangle* tri : *triangles) {
-    if (tri->isInTriangle(p)) {
-      if (tri->isTextureMapping() && texture_mapping) {
-        text_coor tc = tri->getTextureCoor(p);
-        Point vec = texture_map.getBilinearInterpolation(tc);
-        return new Point(vec);
-      } else
-        return tri->getOdLambda(p);
+std::optional<Vector3D> TriangleMesh::getNormalVector(const Point& p) const {
+  for (auto& triangle : triangles) {
+    std::optional<Vector3D> n ;
+    if (auto n = (*triangle).getNormalVector(p)) {
+      if ((*triangle).isNormalMapping() && normal_mapping) {
+        obj::text_coor_t tc = (*triangle).getTextureCoor(p);
+        Vector3D m(normalMap.getBilinearInterpolation(tc));
+        return Vector3D(triangle->rotateVectorTBN(m));
+      }
+      return n;
     }
   }
-  return nullptr;
+  return std::nullopt;
 }
 
-int TriangleMesh::lineIntersection(double a, double b, double c) { return 0; }
+std::optional<Vector3D> TriangleMesh::getNormalVector(const Point& p, const Ray& l) const {
+  for (auto& triangle : triangles) {
+    if (auto normal = (*triangle).getNormalVector(p)) {
+      if ((*triangle).isNormalMapping() && normal_mapping) {  // when normal mapped
+        obj::text_coor_t tc = (*triangle).getTextureCoor(p);
+        Vector3D m(normalMap.getBilinearInterpolation(tc));
+        Vector3D n((*triangle).rotateVectorTBN(m));
+        // is the ray inside the triangle mesh?
+        Vector3D v(l.v);
+        // if surface_normal~I > inversed_surface_normal~I 
+        // => ray is inside
+        if ((-v).getAngle(n) > (-v).getAngle(-n))
+          return -n;
+        else
+          return n;
+      } else {  // default case
+        Vector3D v(l.v);
+        if ((-v).getAngle(*normal) > (-v).getAngle(-*normal))
+          return -(*normal);
+        else
+          return (*normal);
+      }
+    }
+  }
+  return std::nullopt;
+}
+
+std::optional<util::arr3> TriangleMesh::getOdLambda(const Point& p) const {
+  for (auto& triangle : triangles) {
+    if ((*triangle).isInTriangle(p)) {
+      if ((*triangle).isTextureMapping() && texture_mapping) {
+        obj::text_coor_t tc = (*triangle).getTextureCoor(p);
+        return textureMap.getBilinearInterpolation(tc);
+      }
+      return (*triangle).getOdLambda(p);
+    }
+  }
+  return std::nullopt;
+}
+
+obj::text_coor_t TriangleMesh::getTextureCoor(const Point& p) const {
+  return {0.0, 0.0};
+}
+
+void TriangleMesh::addTriangle(const Triangle& triangle) {
+  triangles.push_back(std::make_unique<Triangle>(triangle));
+}
+
+void TriangleMesh::addTriangle(Triangle&& triangle) {
+  triangles.push_back(std::make_unique<Triangle>(std::move(triangle)));
+}
+
+int TriangleMesh::lineIntersection(double a, double b, double c) const { return 0; }

@@ -3,32 +3,31 @@
 FileStream::FileStream() {}
 
 FileStream::FileStream(std::string filename)
-    : inputfile(filename, std::ios::in)
-
-{
+: inputfile(filename, std::ios::in) {
+  KEYWORDS = std::unordered_map<std::string, int>(NUM_OF_KEYWORDS);
   // initialize arrays
-  KEYWORDS[EYE_INDEX] = EYE;                                  // 0
-  KEYWORDS[VIEW_DIR_INDEX] = VIEW_DIR;                        // 1
-  KEYWORDS[UP_DIR_INDEX] = UP_DIR;                            // 2
-  KEYWORDS[VFOV_INDEX] = VFOV;                                // 3
-  KEYWORDS[IMSIZE_INDEX] = IMSIZE;                            // 4
-  KEYWORDS[BKG_COLOR_INDEX] = BKG_COLOR;                      // 5
-  KEYWORDS[MTLCOLOR_INDEX] = MTLCOLOR;                        // 6
-  KEYWORDS[SPHERE_INDEX] = SPHERE;                            // 7
-  KEYWORDS[CYLINDER_INDEX] = CYLINDER;                        // 8
-  KEYWORDS[LIGTH_INDEX] = LIGTH;                              // 9
-  KEYWORDS[ATTLIGTH_INDEX] = ATTLIGTH;                        // 10
-  KEYWORDS[HIGHLIGHT_INDEX] = HIGHLIGHT;                      // 11
-  KEYWORDS[PLANE_INDEX] = PLANE;                              // 12
-  KEYWORDS[DEPTH_CUEING_INDEX] = DEPTH_CUEING;                // 13
-  KEYWORDS[VERTEX_INDEX] = VERTEX;                            // 14
-  KEYWORDS[VERTEX_TEXTURE_COOR_INDEX] = VERTEX_TEXTURE_COOR;  // 15
-  KEYWORDS[VERTEX_NORMAL_INDEX] = VERTEX_NORMAL;              // 16
-  KEYWORDS[FACE_INDEX] = FACE;                                // 17
-  KEYWORDS[TEXTURE_INDEX] = TEXTURE;                          // 18
-  KEYWORDS[NORMAL_INDEX] = NORMAL;                            // 19
-  KEYWORDS[BUMP_INDEX] = BUMP;                                // 20
-  KEYWORDS[MESH_INDEX] = MESH;                                // 20
+  KEYWORDS[EYE] = EYE_INDEX;                                  // 0
+  KEYWORDS[VIEW_DIR] = VIEW_DIR_INDEX;                        // 1
+  KEYWORDS[UP_DIR] = UP_DIR_INDEX;                            // 2
+  KEYWORDS[VFOV] = VFOV_INDEX;                                // 3
+  KEYWORDS[IMSIZE] = IMSIZE_INDEX;                            // 4
+  KEYWORDS[BKG_COLOR] = BKG_COLOR_INDEX;                      // 5
+  KEYWORDS[MTLCOLOR] = MTLCOLOR_INDEX;                        // 6
+  KEYWORDS[SPHERE] = SPHERE_INDEX;                            // 7
+  KEYWORDS[CYLINDER] = CYLINDER_INDEX;                        // 8
+  KEYWORDS[LIGTH] = LIGTH_INDEX;                              // 9
+  KEYWORDS[ATTLIGTH] = ATTLIGTH_INDEX;                        // 10
+  KEYWORDS[HIGHLIGHT] = HIGHLIGHT_INDEX;                      // 11
+  KEYWORDS[PLANE] = PLANE_INDEX;                              // 12
+  KEYWORDS[DEPTH_CUEING] = DEPTH_CUEING_INDEX;                // 13
+  KEYWORDS[VERTEX] = VERTEX_INDEX;                            // 14
+  KEYWORDS[VERTEX_TEXTURE_COOR] = VERTEX_TEXTURE_COOR_INDEX;  // 15
+  KEYWORDS[VERTEX_NORMAL] = VERTEX_NORMAL_INDEX;              // 16
+  KEYWORDS[FACE] = FACE_INDEX;                                // 17
+  KEYWORDS[TEXTURE] = TEXTURE_INDEX;                          // 18
+  KEYWORDS[NORMAL] = NORMAL_INDEX;                            // 19
+  KEYWORDS[BUMP] = BUMP_INDEX;                                // 20
+  KEYWORDS[MESH] = MESH_INDEX;                                // 20
 
   lists[EYE_INDEX] = eye;
   lists[VIEW_DIR_INDEX] = view_dir;
@@ -49,85 +48,77 @@ FileStream::FileStream(std::string filename)
 FileStream::~FileStream() {
   inputfile.close();
   output_stream.close();
-  free(vfov);
+  delete vfov;
 }
 
 void FileStream::readFile() {
-  bool not_found;
   while (inputfile >> input) {
-    not_found = true;
-    for (int i = 0; i < NUM_OF_KEYWORDS; i++) {
-      if (input.compare(KEYWORDS[i]) == 0) {
-        not_found = false;
-        switch (i) {
-          case EYE_INDEX:        // eye : Point
-          case VIEW_DIR_INDEX:   // view_dir : Vector
-          case UP_DIR_INDEX:     // up_dir : Vector
-          case BKG_COLOR_INDEX:  // bkg_color : struct pixel {r, g, b}
-            readTuple(lists[i], 3);
-            break;
-          case VFOV_INDEX:  // vfor : double
-            readTuple(lists[i], 1);
-            break;
-          case IMSIZE_INDEX:  // imsize : 2-duple
-            readTuple(lists[i], 2);
-            break;
-          case MTLCOLOR_INDEX:  // mtlcolor :
-                                // struct color
-                                // {dr,dg,db,sr,sg,sb,ka,kd,ks,n,alpha,etc}
-            readTuple(lists[i], 12);
-            mtlcolors.push_back(lists[i]);
-            break;
-          case DEPTH_CUEING_INDEX:
-            depthcueing_on = true;
-            readTuple(lists[i], 7);
-            break;
-          case SPHERE_INDEX:  // object::sphere
-            readObject("sphere");
-            break;
-          case CYLINDER_INDEX:  // object::cylinder
-            readObject("cylinder");
-            break;
-          case PLANE_INDEX:  // object::cylinder
-            readObject("plane");
-            break;
-          case LIGTH_INDEX:      // light
-          case ATTLIGTH_INDEX:   // attlight
-          case HIGHLIGHT_INDEX:  // highlight
-            readLight(i);
-            break;
-          case VERTEX_INDEX:  // object::plane
-            readVertex();
-            break;
-          case VERTEX_TEXTURE_COOR_INDEX:  // object::plane
-            readVertexTextureCoordinate();
-            break;
-          case VERTEX_NORMAL_INDEX:  // object::plane
-            readVertexNormal();
-            break;
-          case FACE_INDEX:  // object::plane
-            readFace();
-            break;
-          case TEXTURE_INDEX:  // object::plane
-            readTextureMapFile();
-            break;
-          case NORMAL_INDEX:  // object::plane
-            readNormalMapFile();
-            break;
-          case BUMP_INDEX:  // object::plane
-            readBumpMapFile();
-            break;
-          case MESH_INDEX:
-            readTriangleMesh();
-            break;
-          default:
-            not_found = true;
-        }
+    std::cout << input << std::endl;
+    int i = KEYWORDS[input];
+    switch (i) {
+      case EYE_INDEX:        // eye : Point
+      case VIEW_DIR_INDEX:   // view_dir : Vector
+      case UP_DIR_INDEX:     // up_dir : Vector
+      case BKG_COLOR_INDEX:  // bkg_color : struct pixel {r, g, b}
+        readTuple(lists[i], 3);
         break;
-      }
+      case VFOV_INDEX:  // vfor : double
+        readTuple(lists[i], 1);
+        break;
+      case IMSIZE_INDEX:  // imsize : 2-duple
+        readTuple(lists[i], 2);
+        break;
+      case MTLCOLOR_INDEX:  // mtlcolor :
+                            // struct color
+                            // {dr,dg,db,sr,sg,sb,ka,kd,ks,n,alpha,etc}
+        readTuple(lists[i], 12);
+        mtlcolors.push_back(lists[i]);
+        break;
+      case DEPTH_CUEING_INDEX:
+        depthcueing_on = true;
+        readTuple(lists[i], 7);
+        break;
+      case SPHERE_INDEX:  // object::sphere
+        readObject("sphere");
+        break;
+      case CYLINDER_INDEX:  // object::cylinder
+        readObject("cylinder");
+        break;
+      case PLANE_INDEX:  // object::cylinder
+        readObject("plane");
+        break;
+      case LIGTH_INDEX:      // light
+      case ATTLIGTH_INDEX:   // attlight
+      case HIGHLIGHT_INDEX:  // highlight
+        readLight(i);
+        break;
+      case VERTEX_INDEX:  // object::plane
+        readVertex();
+        break;
+      case VERTEX_TEXTURE_COOR_INDEX:  // object::plane
+        readVertexTextureCoordinate();
+        break;
+      case VERTEX_NORMAL_INDEX:  // object::plane
+        readVertexNormal();
+        break;
+      case FACE_INDEX:  // object::plane
+        readFace();
+        break;
+      case TEXTURE_INDEX:  // object::plane
+        readTextureMapFile();
+        break;
+      case NORMAL_INDEX:  // object::plane
+        readNormalMapFile();
+        break;
+      case BUMP_INDEX:  // object::plane
+        readBumpMapFile();
+        break;
+      case MESH_INDEX:
+        readTriangleMesh();
+        break;
+      default:
+        throw std::invalid_argument(input.append(" is invalid keyword"));
     }
-    if (not_found)
-      throw std::invalid_argument(input.append(" is invalid keyword"));
   }
 }
 // triangle mash texture and maps should be writen at the end of the file
@@ -181,7 +172,9 @@ void FileStream::readTriangleMesh() {
     tri_mesh.triangles.at(i) = fs.at(index);
   }
 
-  tri_meshes.push_back(tri_mesh);
+  tri_mesh.type = "mesh";
+  std::unique_ptr<object> pMesh(new triangle_mesh(std::move(tri_mesh)));
+  objects.push_back(std::move(pMesh));
 }
 
 void FileStream::initializeOutputFile() {
@@ -195,18 +188,18 @@ void FileStream::writeFile(std::string str) { output_stream << str; }
     return an object one by one
     check the type of an object
  */
-object FileStream::getObject() {
-  if (get_obj_count > obj_count || obj_count == 0)
-    return object{};
+object* FileStream::getObject() {
+  if (get_obj_count >= objects.size())
+    return nullptr;
   else
-    return objects[get_obj_count++];
+    return objects[get_obj_count++].get();
 }
 
-light FileStream::getLight() {
-  if (get_light_count > light_count || light_count == 0)
-    return light{};
+light* FileStream::getLight() {
+  if (get_light_count >= lights.size())
+    return nullptr;
   else
-    return lights[get_light_count++];
+    return lights[get_light_count++].get();
 }
 
 void FileStream::readTuple(double *arr, int size) {
@@ -245,13 +238,14 @@ void FileStream::readObject(std::string type) {
     normal_map = normal_maps.back();
     normal_maps.pop_back();
   }
+
   // generate the certain type of object
   if (type == "sphere") {
     sphere s;
-    s.name = std::to_string(obj_count);
     // use the color value from the file
     if (mtlcolor != nullptr) {
-      for (int i = 0; i < 12; i++) s.color[i] = mtlcolor[i];
+      for (int i = 0; i < 12; i++) 
+        s.color[i] = mtlcolor[i];
     }
     // texture mapping
     if (texture_mapping) {
@@ -264,25 +258,26 @@ void FileStream::readObject(std::string type) {
       s.normal_map = normal_map;
     }
 
-    // read origin
+    // Read origin
     for (int i = 0; i < 3; i++) {
       inputfile >> input;
       s.origin[i] = stod(input);
     }
-    // read radius
+    // Read radius
     inputfile >> input;
     s.radius = stod(input);
-    // store it as an object
-    object o;
-    o.type = "sphere";
-    o.sph = s;
-    objects[obj_count++] = o;
+    // Store it as an object
+    s.type = type;
+    // Create a pointer to the sphere object
+    // And move the ownership to the object vector
+    std::unique_ptr<object> pSphere(new sphere(std::move(s)));
+    objects.push_back(std::move(pSphere));
   } else if (type == "cylinder") {
     cylinder c;
-    c.name = std::to_string(obj_count);
     // use the color value from the file
     if (mtlcolor != nullptr) {
-      for (int i = 0; i < 12; i++) c.color[i] = mtlcolor[i];
+      for (int i = 0; i < 12; i++) 
+        c.color[i] = mtlcolor[i];
     }
     // texture mapping
     if (texture_mapping) {
@@ -311,15 +306,13 @@ void FileStream::readObject(std::string type) {
     inputfile >> input;
     c.length = stod(input);
     // store it as an object
-    object o;
-    o.type = "cylinder";
-    o.cyl = c;
-    objects[obj_count++] = o;
+    c.type = type;
+    std::unique_ptr<object> pCylinder(new cylinder(std::move(c)));
+    objects.push_back(std::move(pCylinder));
   }
   // plane nx ny nz px py pz dir_x dir_y w h
   else if (type == "plane") {
     plane p;
-    p.name = std::to_string(obj_count);
     // use the color value from the file
     if (mtlcolor != nullptr) {
       for (int i = 0; i < 12; i++) p.color[i] = mtlcolor[i];
@@ -355,10 +348,9 @@ void FileStream::readObject(std::string type) {
     inputfile >> input;
     p.h = stod(input);
     // store it as an object
-    object o;
-    o.type = "plane";
-    o.pln = p;
-    objects[obj_count++] = o;
+    p.type = "plane";
+    std::unique_ptr<object> pPlane(new plane(std::move(p)));
+    objects.push_back(std::move(pPlane));
   } else
     // if keyword is not a recognizable word
     throw std::invalid_argument("invalid object");
@@ -410,7 +402,8 @@ void FileStream::readLight(int i) {
     }
   }
 
-  lights[light_count++] = l;
+  std::unique_ptr<light> pLight(new light(std::move(l)));
+  lights.push_back(std::move(pLight));
 }
 
 void FileStream::readVertex() {

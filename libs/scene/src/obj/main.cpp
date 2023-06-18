@@ -1,3 +1,4 @@
+#include "util/util.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -35,52 +36,59 @@ typedef struct I {
 
 int main() {
 
-    Point origin(0, 0, 2);
-    Sphere sphere("0", color{0.5, 1, 0,1,0,0,0.2,0.4,0.2,20}, 
-                  1.0, 1.0, origin, 5);
+    Point origin(-4, 0, -10);
+    Sphere sphere({0.5, 1, 0,1,0,0,0.2,0.4,0.2,20}, 
+        1.0, 1.0, origin, 2);
+
+    Point none(-4.26279, 1.94516, -9.61619);
+    std::cout << sphere.isOnSurface(none) << std::endl;
 
     Point start(0,0,10);
     Vector3D v(3, 0, -4);
-    Line l(start, v);
+    Ray r(start, v);
     Point p(3, 0, 6);
 
-    Vector3D* n = sphere.getNormalVector(p, l);
+    auto n = sphere.getNormalVector(p, r);
     std::cout << n->x << " " << n->y << " " << n->z << std::endl;
 
 
     Vector3D V(p, start);
     Point total_I(0.0, 0.0, 0.0);
-    Vector3D* N = sphere.getNormalVector(p, l);
+    auto N = sphere.getNormalVector(p, r);
     
-    Point Od(sphere.clr.dr, sphere.clr.dg, sphere.clr.db);
-    Point Os(sphere.clr.sr, sphere.clr.sg, sphere.clr.sb);
+    Point Od(sphere.color.dr, sphere.color.dg, sphere.color.db);
+    Od.print();
+    Point Os(sphere.color.sr, sphere.color.sg, sphere.color.sb);
+    Os.print();
     
-    Point I_ambient = Od * sphere.clr.ka;
+    Point I_ambient = Od * sphere.color.ka;
+    I_ambient.print();
 
     Vector3D L(Point(3,0,6), Point(5,2,7));
-    L = L.getUnit();
-    Vector3D H = ((L + V) / (L + V).getMag());
+    L = L.unit();
+    L.print();
+    Vector3D H = ((L + V) / (L + V).mag());
+    H.print();
 
-        //N*L
-        double N_dot_L = N->dotProd(L);
-        //N_dot_L should not be negative
-        if (N_dot_L < 0)
-            N_dot_L = 0;
-        //N*H
-        double N_dot_H = N->dotProd(H);
-        //N_dot_L should not be negative
-        if (N_dot_H < 0)
-            N_dot_H = 0;
-            
-        double N_dot_H_sq_n = pow(N_dot_H, sphere.clr.n);
-        Point I_diffuse = Od * sphere.clr.kd * N_dot_L;
-        Point I_specular = Os * sphere.clr.ks * N_dot_H_sq_n;
-        Point IL(1, 1, 1);
-        //total_I += I
-        //apply shadows
-        total_I = I_ambient  + IL * (I_diffuse + I_specular);
+    //N*L
+    double N_dot_L = N->dot(L);
+    //N_dot_L should not be negative
+    if (N_dot_L < 0)
+        N_dot_L = 0;
+    //N*H
+    double N_dot_H = N->dot(H);
+    //N_dot_L should not be negative
+    if (N_dot_H < 0)
+        N_dot_H = 0;
+        
+    double N_dot_H_sq_n = pow(N_dot_H, sphere.color.n);
+    Point I_diffuse = Od * sphere.color.kd * N_dot_L;
+    Point I_specular = Os * sphere.color.ks * N_dot_H_sq_n;
+    Point IL(1, 1, 1);
+    //total_I += I
+    //apply shadows
+    total_I = I_ambient  + IL * (I_diffuse + I_specular);
     std::cout << total_I.x * 255 << " " << total_I.y * 255 << " " << total_I.z * 255 << " " << std::endl;
-    free(n);
     // Vector v1(3, -3, 1);
     // Vector v2(4, 9, 2);
     // Vector v3 = v1 * v2;
