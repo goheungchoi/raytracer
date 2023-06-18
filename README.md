@@ -2,11 +2,11 @@
 
 **Author**: Goheung Choi
 
-**Version**: *`1.1.2`*
+**Version**: *`1.2.0`*
 
-**Last Update**: *06/13/23*
+**Last Update**: *06/18/23*
 
-**New Update**: Modernization and optimization using C++17 features.
+**New Update**: Modernization and optimization using C++17 features. Now, about 47% faster than the previous version.
 
 ## Description
 This is a raytracing program using the Phong illustration model with additional functions. Users can input image data with a formatted text file, and the result file will be printed out as a ppm format file.
@@ -131,3 +131,12 @@ This is a raytracing program using the Phong illustration model with additional 
     - Refraction is calculated via Fresnal reflection.
     - This program uses the total distance that a ray travels rather than recursion depth in order to terminate a loop 
 
+## Future Work
+
+1. Parallelization, multi-threading.
+2. Flexible programming with more user interactive functionalities.
+3. Implementation of Bounding Volume Hierachy.
+    .
+    .
+    .
+So on.

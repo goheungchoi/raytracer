@@ -5,7 +5,7 @@
 *.d
 
 # Build Folder
-build
+build/
 
 # Compiled Object files
 *.slo
